@@ -1,0 +1,29 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: apigateway
+
+  cloud:
+    gateway:
+      routes:
+        - id: bookms
+          uri: lb://bookms
+          predicates:
+            - Path=/dummy-bookms/**
+          filters:
+            - RewritePath=/dummy-bookms/(?<path>.*),/$\{path}
+
+        - id: issuerms
+          uri: lb://issuerms
+          predicates:
+            - Path=/dummy-issuerms/**
+          filters:
+            - RewritePath=/dummy-issuerms/(?<path>.*),/$\{path}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
